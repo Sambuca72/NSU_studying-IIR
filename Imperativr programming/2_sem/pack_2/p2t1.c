@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 long long extended_gcd(long long a, long long b, long long *x, long long *y) {
     if (b == 0) {
         *x = 1;
@@ -37,7 +39,8 @@ long long CRT (int k, long long *a,long long *m){
     for(int i =0;i<k;i++){
         long long Mi=M/m[i];
         long long inv = mod_inverse(Mi,m[i]);
-        x = (x + ((a[i] * Mi) % M * inv) % M) % M;
+
+        x = (x + a[i] * Mi * inv) % M;
 
     }
 
