@@ -1,15 +1,11 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "p2t6.h"
-// #include <>
+// #include "func.c"
+
 
 // f'(x)=~(f(x+h)-f(x-h))/2h
 
-// double Function(double x) {
-//     if (x < 0.0 || x > 1.0)
-//     exit (666); //out of range
-//     return x * x - x;
-//     }
+extern double Function(double x);
 
 double derivative(double x, double h) {
     if (x == 0.0) {
@@ -35,7 +31,7 @@ int main(){
         // printf("penis%d0\n",i);
         double x;
         scanf("%lf",&x);
-        printf("%lf\n",x);
+        // printf("%lf\n",x);
         double df = derivative(x,h);
         // printf("penis%d2\n",i
         printf("%.15f\n",df);

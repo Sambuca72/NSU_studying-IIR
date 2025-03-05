@@ -1,4 +1,3 @@
-#include "p2t6.h"
 #include <stdlib.h>
 
 double Function(double x) {
