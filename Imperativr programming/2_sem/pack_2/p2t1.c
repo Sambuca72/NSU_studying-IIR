@@ -82,4 +82,3 @@ int main(){
     fclose(stdin);
     fclose(stdout);
 }
-//penis
