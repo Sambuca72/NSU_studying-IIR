@@ -1,5 +1,0 @@
-Video 
-  Total frames: 68 ms
-  Total decode time:0.000 ms
-  Actual playback time:  -60256948053868544.000 ms
-  Min/avg/max decode time: 0.000/0.000/0.000 ms
