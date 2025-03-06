@@ -1,8 +1,8 @@
 import Control.Monad.State
 import Control.Monad.Writer
-import Control.Monad.Maybe
+-- import Control.Monad.Maybe
 import qualified Data.Map as M
-import Control.Monad.Class
+-- import Control.Monad.Class
 
 
 
@@ -37,23 +37,36 @@ parensMatch s = count == 0
   where (_,count) = runState (mapM_ paren s) 0
 
 
-{-
-Реализуйте функции push, pop и empty для работы со стеком, который реализован с помощью списка, хранящегося в состоянии.
--}
+-- {-
+-- Реализуйте функции push, pop и empty для работы со стеком, который реализован с помощью списка, хранящегося в состоянии.
+-- -}
 
 push :: a -> State [a] ()
-push _ = undefined
+push a = do 
+  st <- get
+  put (a:st)
 
 pop :: State [a] a
-pop = undefined
+pop = do
+  st <- get
+  case st of
+    [] -> error "Empty list"
+    _ -> do 
+         put(tail st)
+         return (head st)
+  
 
 empty :: State [a] Bool
-empty = undefined
+empty = do
+  st <- get
+  case st of
+    [] -> return True
+    _ -> return False
 
 
 stack :: State [Int] (Int,Int,Int)
 stack = do
-  push 42
+  -- push 42
   push 43
   push 44
   x <- pop
@@ -63,16 +76,19 @@ stack = do
 
 r = evalState stack []
 
-{-
-Напишите функцию, которая печатает значение из состояния с приветствием, 
-увеличивает его на 1 и возвращает исходное значение, преобразованное в строку:
-ghci> runStateT sPrintIncAccum 10
-Hello, 10
-("10",11)
--}
+-- {-
+-- Напишите функцию, которая печатает значение из состояния с приветствием, 
+-- увеличивает его на 1 и возвращает исходное значение, преобразованное в строку:
+-- ghci> runStateT sPrintIncAccum 10
+-- Hello, 10
+-- ("10",11)
+-- -}
 sPrintIncAccum :: (Num a, Show a) => StateT a IO String
-sPrintIncAccum = undefined
-
+sPrintIncAccum = do 
+  st <- get 
+  lift (print("Hello" ++ show st))
+  put (st + 1)
+  return (show st)
 
 
 data Expr = Num Integer | 
@@ -97,44 +113,49 @@ instance Show Expr where
 
 
 
-{-
-Для выражений напишите функцию eval, которая
-- вычисляет значение выражения, если это возможно (поскольку окружение не задано, в выражении не должно быть переменных)
-- логгирует вычисления
+-- {-
+-- Для выражений напишите функцию eval, которая
+-- - вычисляет значение выражения, если это возможно (поскольку окружение не задано, в выражении не должно быть переменных)
+-- - логгирует вычисления
 
-Чем отличаются варианты 11 и 12?
+-- Чем отличаются варианты 11 и 12?
 
-ghci> e = (Bin Add (Bin Add (Num 2) (Num 3)) (Num 1))
-ghci> e
-((2 + 3) + 1)
-ghci> runWriterT (eval11 e)
-Just (6,"add 2 3;add 5 1;")
-ghci> runWriter $ runMaybeT (eval12 e)
-(Just 6,"add 2 3;add 5 1;")
-ghci> runWriterT (eval11 v)
-Nothing
-ghci> runWriter $ runMaybeT (eval12 v)
-(Nothing,"add 2 3;var x is not defined")
--}
+-- ghci> e = (Bin Add (Bin Add (Num 2) (Num 3)) (Num 1))
+-- ghci> e
+-- ((2 + 3) + 1)
+-- ghci> runWriterT (eval11 e)
+-- Just (6,"add 2 3;add 5 1;")
+-- ghci> runWriter $ runMaybeT (eval12 e)
+-- (Just 6,"add 2 3;add 5 1;")
+-- ghci> runWriterT (eval11 v)
+-- Nothing
+-- ghci> runWriter $ runMaybeT (eval12 v)
+-- (Nothing,"add 2 3;var x is not defined")
+-- -}
 
+a = Num 5
+b = Var "penis"
 
 eval11 :: Expr -> WriterT String Maybe Integer
-eval11 _ = undefined
+eval11 (Num n) =  return n
+eval11 (Var x) =  x
+eval11 
 
-eval12 :: Expr -> MaybeT (Writer String) Integer
-eval12 _ = undefined
 
----
-{-
-Напишите функцию eval, которая вычисляет значение выражения в **окружении**, **если это возможно**. 
-Используйте `Reader/ReaderT` и `Maybe/MaybeT`
+-- eval12 :: Expr -> MaybeT (Writer String) Integer
+-- eval12 _ = undefined
 
--}
-type Env = M.Map Name Integer
-eval2 = undefined
+-- ---
+-- {-
+-- Напишите функцию eval, которая вычисляет значение выражения в **окружении**, **если это возможно**. 
+-- Используйте `Reader/ReaderT` и `Maybe/MaybeT`
 
-{-
-Добавьте логгирование к предыдущей функции.
--}
+-- -}
+-- type Env = M.Map Name Integer
+-- eval2 = undefined
 
-eval3 = undefined
+-- {-
+-- Добавьте логгирование к предыдущей функции.
+-- -}
+
+-- eval3 = undefined
