@@ -1,1 +1,0 @@
-double Function(double x);

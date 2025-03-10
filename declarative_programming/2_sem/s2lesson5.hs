@@ -105,6 +105,12 @@ instance Show Op where
     show Sub = " - "
     show Div = " / "
 
+apply :: Op -> Integer -> Integer -> Integer
+apply Add = (+)
+apply Sub = (-)
+apply Mul = (*)
+apply Div = div
+
 instance Show Expr where
     show (Num n) = show n
     show (Var x) = x
@@ -134,12 +140,19 @@ instance Show Expr where
 -- -}
 
 a = Num 5
-b = Var "penis"
+b = Var "p"
 
 eval11 :: Expr -> WriterT String Maybe Integer
 eval11 (Num n) =  return n
-eval11 (Var x) =  x
-eval11 
+-- eval11 (Var x) =  x
+eval11 (Bin o e1 e2) = do
+  v1<- eval11 e1
+  v2<- eval11 e2
+  case o of
+    Add -> 
+    Mul ->
+    Sub ->
+    Div ->
 
 
 -- eval12 :: Expr -> MaybeT (Writer String) Integer
