@@ -6,6 +6,8 @@ int main()
         printf("Compiler: clang\n");
     #elif defined(__GNUC__)
         printf("Compiler: GCC\n");
+    #elif defined(_MSC_VER)
+        printf("Compiler: MSVC\n");
     #elif defined(__TINYC__)
         printf("Compiler: TCC\n");
     #endif
@@ -17,10 +19,9 @@ int main()
     #endif
 
     #ifdef NDEBUG
-        printf("Asserts: disabled");
+        printf("Asserts: disabled\n");
     #else
-        printf("Asserts: enabled");
+        printf("Asserts: enabled\n");
     #endif
 
-    return 0;
 }
