@@ -56,7 +56,8 @@ stringToMorse :: String -> Maybe [Morse]
 stringToMorse = mapM charToMorse
 
 morseToChar :: Morse -> Maybe Char
-morseToChar = flip M.lookup reverseMorseCode --flip
+morseToChar = flip M.lookup reverseMorseCode {-flip :: (a -> b -> c) -> b -> a -> c
+                                                flip f x y = f y x-}
 
 morseToString :: [Morse] -> Maybe String
 morseToString = mapM morseToChar

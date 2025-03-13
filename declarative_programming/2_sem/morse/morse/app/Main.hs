@@ -22,7 +22,7 @@ processInput converter = do
 processLines :: (String -> String) -> IO ()
 processLines converter = do
     putStr "> "
-    hFlush stdout --
+    hFlush stdout --сливает буфер в поток вывода
     line <- getLine
     if null line
         then return ()
