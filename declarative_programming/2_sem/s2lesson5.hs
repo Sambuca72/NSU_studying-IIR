@@ -1,6 +1,6 @@
 import Control.Monad.State
 import Control.Monad.Writer
--- import Control.Monad.Maybe
+import Control.Monad.Trans.Maybe
 import qualified Data.Map as M
 -- import Control.Monad.Class
 
@@ -142,21 +142,51 @@ instance Show Expr where
 a = Num 5
 b = Var "p"
 
+
+-- ---
+-- {-
+-- Напишите функцию eval, которая вычисляет значение выражения в **окружении**, **если это возможно**. 
+-- Используйте `Reader/ReaderT` и `Maybe/MaybeT`
+
+-- -}
+-- type Env = M.Map Name Integer
+-- eval2 = undefined
+
+-- {-
+-- Добавьте логгирование к предыдущей функции.
+-- -}
+
+-- eval3 = undefinedeval11 :: Expr -> WriterT String Maybe Integer
 eval11 :: Expr -> WriterT String Maybe Integer
 eval11 (Num n) =  return n
--- eval11 (Var x) =  x
+eval11 (Var x) =  lift Nothing
 eval11 (Bin o e1 e2) = do
   v1<- eval11 e1
-  v2<- eval11 e2
+  v2<- eval11 e2 
   case o of
-    Add -> 
-    Mul ->
-    Sub ->
-    Div ->
+    Div -> do if v2 == 0
+              then lift Nothing
+              else return (div v1 v2)
+    _ -> return (apply o v1 v2)
 
 
--- eval12 :: Expr -> MaybeT (Writer String) Integer
--- eval12 _ = undefined
+eval12 :: Expr -> MaybeT (Writer String) Integer
+eval12 (Num n) = return n
+eval12 (Var x) =  do 
+                    tell ("var " ++ x ++ " isn't deifned")
+                    MaybeT $ return Nothing
+eval12 (Bin op e1 e2) = do 
+  v1<- eval12 e1
+  v2 <- eval12 e2
+  case op of 
+    Div -> do if v2 == 0
+              then do
+                tell "Division by zero"
+                MaybeT $return Nothing
+              else return (div v1 v2)
+    _ -> return(apply op v1 v2)
+
+
 
 -- ---
 -- {-
