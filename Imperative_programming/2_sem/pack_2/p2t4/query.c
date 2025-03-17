@@ -1,4 +1,5 @@
 // #include "sum.c"
+#include <stdint.h>
 
 extern int64_t Sum(int l, int r); 
 

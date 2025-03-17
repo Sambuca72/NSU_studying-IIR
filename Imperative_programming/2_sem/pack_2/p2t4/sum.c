@@ -1,3 +1,4 @@
+#include <stdint.h>
 static int64_t *prefsum;
 static int n_global;
 
