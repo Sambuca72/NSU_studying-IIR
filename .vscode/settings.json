@@ -3,6 +3,7 @@
     "files.associations": {
         "limits": "c",
         "variant": "c",
-        "stdlib.h": "c"
+        "stdlib.h": "c",
+        "ctype.h": "c"
     }
 }
