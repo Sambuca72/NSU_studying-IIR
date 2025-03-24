@@ -5,8 +5,9 @@ import Control.Monad.Trans.Writer
 import Control.Monad (guard)
 import Control.Monad.Trans
 import Data.Text.Internal.Read (IParser(P))
+import Data.ByteString.Builder.Extra (runBuilder)
 
--- Положение на доске
+
 data Position = Position {f :: Char, r :: Int} 
         deriving (Eq)
 
@@ -14,7 +15,7 @@ instance Show Position where
     show :: Position -> String
     show (Position f r) = f : show r
 
--- Один ход
+
 data Step = Step {from :: Position, to :: Position} 
         deriving (Eq)
 
@@ -81,7 +82,7 @@ possibleSheepStepsDo (Game s w) = do
     (df, dr) <- [(1, 1), (1, -1), (-1, 1), (-1, -1)]
     let f'= toEnum (fromEnum (f s) + df)
     let r' = r s + dr
-    guard (f' >= 'a' && 'f' <= 'h')
+    guard (f' >= 'a' && f' <= 'h')
     guard (r' >= 1 && r' <= 8)
     guard (Position f' r' `notElem` w)
     return (Step s (Position f' r')) 
@@ -155,4 +156,30 @@ loggedTurn game@(Game s ws) = do
                         return $ Game s' (w' : filter (/=w) ws)
 
 loggedTurn' :: Game -> ExceptT GameResult (Writer [Step]) Game
-loggedTurn' = undefined
+loggedTurn' game@(Game s ws) = do
+    let sheepMoves = possibleSheepSteps game
+    case sheepMoves of
+        [] -> throwE WolfsWin  
+        (Step _ s':_) -> do
+            lift $ tell [Step s s']  
+            if r s' == 8 
+                then throwE SheepWin  
+                else do
+                    let g' = Game s' ws
+                    let wolfMoves = possibleWolfsSteps g'
+                    case wolfMoves of
+                        [] -> throwE SheepWin 
+                        (Step w w':_) -> do
+                            lift $ tell [Step w w']  
+                            return $ Game s' (w' : filter (/= w) ws)  -- Обновляем игру
+
+
+runGameWithLog :: Game -> (Either GameResult Game, [Step])
+runGameWithLog game = runWriter (runExceptT (gameLoop game))
+
+gameLoop :: Game -> ExceptT GameResult (Writer [Step]) Game
+gameLoop game = do
+    nextGame <- loggedTurn' game
+    gameLoop nextGame  
+  `catchE` (\res -> throwE res)  
+

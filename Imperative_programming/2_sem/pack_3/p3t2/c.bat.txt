@@ -1,4 +1,7 @@
-gcc -c -I zlib -I minizip  test.c
-gcc -c -I zlib -I minizip zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/gzclose.c zlib/gzlib.c zlib/gzread.c zlib/gzwrite.c zlib/infback.c zlib/inffast.c zlib/inflate.c zlib/inftrees.c zlib/trees.c zlib/uncompr.c zlib/zutil.c 
-gcc -c -I zlib -I minizip minizip/unzip.c minizip/ioapi.c
-gcc -o checked_solution.exe compress.o crc32.o deflate.o gzclose.o gzlib.o gzread.o gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.o unzip.o ioapi.o
+gcc -Izlib -Izlib/minizip -DUSE_CRYPT -c zlib/minizip/unzip.c zlib/minizip/ioapi.c
+ar rcs liminizip.a unzip.o ioapi.o
+
+gcc -c -Izlib zlib/*.c
+ar rcs libz.a *.o
+
+gcc -Izlib -Izlib/minizip test.c -L. -lz -lminizip -o checked_solution
