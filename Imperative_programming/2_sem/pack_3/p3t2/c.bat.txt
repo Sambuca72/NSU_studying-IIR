@@ -1,4 +1,4 @@
-gcc -c -I zlib -I minizip  test.c
-gcc -c -I zlib -I minizip zlib/compress.c zlib/crc32.c zlib/deflate.c zlib/gzclose.c zlib/gzlib.c zlib/gzread.c zlib/gzwrite.c zlib/infback.c zlib/inffast.c zlib/inflate.c zlib/inftrees.c zlib/trees.c zlib/uncompr.c zlib/zutil.c 
-gcc -c -I zlib -I minizip minizip/unzip.c minizip/ioapi.c
-gcc -o checked_solution.exe compress.o crc32.o deflate.o gzclose.o gzlib.o gzread.o gzwrite.o infback.o inffast.o inflate.o inftrees.o trees.o uncompr.o zutil.o unzip.o ioapi.o
+cl /c /I zlib /I minizip test.c
+cl /c /I zlib /I minizip zlib\adler32.c zlib\compress.c zlib\crc32.c zlib\deflate.c zlib\gzclose.c zlib\gzlib.c zlib\gzread.c zlib\gzwrite.c zlib\infback.c zlib\inffast.c zlib\inflate.c zlib\inftrees.c zlib\trees.c zlib\uncompr.c zlib\zutil.c
+cl /c /I zlib /I minizip /DUSE_CRYPT minizip\unzip.c minizip\ioapi.c
+cl /Fechecked_solution.exe test.obj adler32.obj compress.obj crc32.obj deflate.obj gzclose.obj gzlib.obj gzread.obj gzwrite.obj infback.obj inffast.obj inflate.obj inftrees.obj trees.obj uncompr.obj zutil.obj unzip.obj ioapi.obj
