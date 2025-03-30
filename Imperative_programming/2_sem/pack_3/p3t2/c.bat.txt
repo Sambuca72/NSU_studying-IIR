@@ -1,4 +1,14 @@
+<<<<<<< HEAD
 cl /c /I zlib /I minizip test.c
 cl /c /I zlib /I minizip zlib\adler32.c zlib\compress.c zlib\crc32.c zlib\deflate.c zlib\gzclose.c zlib\gzlib.c zlib\gzread.c zlib\gzwrite.c zlib\infback.c zlib\inffast.c zlib\inflate.c zlib\inftrees.c zlib\trees.c zlib\uncompr.c zlib\zutil.c
 cl /c /I zlib /I minizip /DUSE_CRYPT minizip\unzip.c minizip\ioapi.c
 cl /Fechecked_solution.exe test.obj adler32.obj compress.obj crc32.obj deflate.obj gzclose.obj gzlib.obj gzread.obj gzwrite.obj infback.obj inffast.obj inflate.obj inftrees.obj trees.obj uncompr.obj zutil.obj unzip.obj ioapi.obj
+=======
+gcc -Izlib -Izlib/minizip -DUSE_CRYPT -c zlib/minizip/unzip.c zlib/minizip/ioapi.c
+ar rcs liminizip.a unzip.o ioapi.o
+
+gcc -c -Izlib zlib/*.c
+ar rcs libz.a *.o
+
+gcc -Izlib -Izlib/minizip test.c -L. -lz -lminizip -o checked_solution
+>>>>>>> f8b0170097c3d4833bee03fdb8ebe562f81b31ab

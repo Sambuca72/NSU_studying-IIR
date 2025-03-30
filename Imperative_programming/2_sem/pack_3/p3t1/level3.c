@@ -8,18 +8,17 @@ void dgemm(int m, int n, int k,
     double alpha , const double *A, const double *B,
     double beta , double *C){
 
-        for(int i = 0; i<m;i++){
-            for(int j =0; j<n;j++){
-                C[i*n+j]*=beta;
-            }
-        }
-
-        for(int i = 0;i<m;i++){
-            for(int j = 0; j<n;j++){
+        for(int j = 0;j<m;j++){
+            for(int i = 0; i<n;i++){
                 for(int l=0; l<k;l++){
-                    C[i*n+j]+=alpha*A[i*k+l]*B[l*n+j];
+                    if (beta == 0.0){
+                        C[i*n+j]+= alpha * A[i*k+l] * B[l*n+j];    
+                    }else {
+                        C[i*n+j]= C[i*n+j]*beta + alpha * A[i*k+l] * B[l*n+j];
+                    }                   
                 }
             }
         }
         
     }
+

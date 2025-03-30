@@ -37,7 +37,7 @@ void daxpy(int n, double alpha , const double *X, double *Y){
 double ddot(int n, const double *X, const double *Y){
     double res = 0.0;
     for(int i = 0;i < n; i++){
-        res+=X[i]*Y[i];
+        res = res + X[i]*Y[i];
     }
     return res;
 }
