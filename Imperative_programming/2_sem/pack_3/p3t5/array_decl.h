@@ -1,16 +1,19 @@
-#pragma once
+#include "template.h"
 
 typedef struct NAME {
     int n; 
+    int cap; 
     TYPE *arr;
-    int capacity; 
-}NAME; 
+} NAME; 
 
-void NAME##_int(NAME *vec);
-void NAME##_destroy(NAME *vec);
-int NAME ##_push(NAME *vec, TYPE value);
-TYPE NAME##_pop(NAME *vec);
-void NAME##_reserve(NAME *vec, int capacity);
-void NAME##_resize(NAME *vec, int newCnt, TYPE fill);
-void NAME##_insert(NAME *vec, int where, int num);
-void NAME##_erase(NAME *vec, int where, int num);
+void CONCAT(NAME, init) (NAME *vec);
+void CONCAT(NAME, destroy) (NAME *vec);
+int CONCAT(NAME, push) (NAME *vec, TYPE value);
+TYPE CONCAT(NAME, pop) (NAME *vec);
+void CONCAT(NAME, reserve) (NAME *vec, int capacity);
+void CONCAT(NAME, resize) (NAME *vec, int newCnt, TYPE fill);
+void CONCAT(NAME, insert) (NAME *vec, int where, TYPE *array, int num);
+void CONCAT(NAME, erase) (NAME *vec, int where, int num);
+
+#undef TYPE
+#undef NAME

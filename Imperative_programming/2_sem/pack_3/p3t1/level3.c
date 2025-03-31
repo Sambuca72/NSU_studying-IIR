@@ -21,4 +21,3 @@ void dgemm(int m, int n, int k,
         }
         
     }
-
