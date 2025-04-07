@@ -4,8 +4,6 @@ import Control.Monad.Trans.Except
 import Control.Monad.Trans.Writer
 import Control.Monad (guard)
 import Control.Monad.Trans
-import Data.Text.Internal.Read (IParser(P))
-import Data.ByteString.Builder.Extra (runBuilder)
 
 
 data Position = Position {f :: Char, r :: Int} 
@@ -183,3 +181,67 @@ gameLoop game = do
     gameLoop nextGame  
   `catchE` (\res -> throwE res)  
 
+
+
+// #include "integerset.h"
+// #include <stdio.h>
+// #include <stdlib.h>
+// #include <limits.h>
+
+// #define hash_size 300000007 
+
+
+
+// static unsigned hashfunc(int num){
+//     return (unsigned int)num%hash_size;
+// }
+
+// IntegerSet* CreateSet(const int *arr, int size) {
+//     if (size < 0) return NULL;
+
+//     IntegerSet *set = (IntegerSet*)malloc(sizeof(IntegerSet));
+//     if (!set) return NULL; 
+
+//     set->table = (int*)malloc(sizeof(int) * hash_size);
+//     if (!set->table) {
+//         free(set);
+//         return NULL;
+//     }
+
+//     set->size = 0;
+//     for (int i = 0; i < hash_size; i++) set->table[i] = INT_MIN;
+
+    
+//     if (size == 0) return set;
+
+//     for (int i = 0; i < size; i++) {
+//         int num = arr[i];
+//         unsigned int hash = hashfunc(num);
+        
+//         while (set->table[hash] != INT_MIN) {
+//             if (set->table[hash] == num) {
+//                 free(set->table);
+//                 free(set);
+//                 return NULL; 
+//             }
+//             hash = (hash + 1) % hash_size;
+//         }
+//         set->table[hash] = num;
+//         set->size++;
+//     }
+//     return set;
+// }
+
+// int IsInSet(const IntegerSet* set, int num) {
+//     if (!set || set->size == 0) return 0;
+
+//     unsigned int idx = hashfunc(num);
+//     unsigned int start_idx = idx;
+
+//     while (set->table[idx] != INT_MIN) {
+//         if (set->table[idx] == num) return 1;
+//         idx = (idx + 1) % hash_size;
+//         if (idx == start_idx) break; 
+//     }
+//     return 0;
+// }
