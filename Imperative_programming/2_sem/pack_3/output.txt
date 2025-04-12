@@ -1,1 +1,33 @@
-3.54886799003233921468
+parsing expr
+parsing monome
+parsing atom
+parsing expr
+parsing monome
+parsing atom
+parsing expr
+parsing monome
+parsing atom
+parsing expr
+parsing monome
+parsing atom
+parsing expr
+parsing monome
+parsing atom
+res: 3.00000000000000000000
+res: 3.00000000000000000000
+parsing monome
+parsing atom
+parsing expr
+parsing monome
+parsing atom
+parsing expr
+parsing monome
+parsing atom
+parsing atom
+res: -5.00000000000000000000
+res: -5.00000000000000000000
+res: 8.00000000000000000000
+res: 8.00000000000000000000
+res: 8.00000000000000000000
+8.00000000000000000000
+penis

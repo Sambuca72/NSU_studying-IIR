@@ -12,6 +12,8 @@
         "tuple": "cpp",
         "type_traits": "cpp",
         "utility": "cpp",
-        "vector": "cpp"
+        "vector": "cpp",
+        "memory_resource": "c",
+        "limits.h": "c"
     }
 }

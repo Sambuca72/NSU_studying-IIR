@@ -1,0 +1,4 @@
+digraph graphname {
+    a[color=green];
+    a -> b -> c
+}
