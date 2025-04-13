@@ -2,7 +2,7 @@
 typedef struct State {
 char *regs [256];
 } State;
-// #include "decls.h" //contains function declarations (chunk of code above)
+#include "decls.h" //contains function declarations (chunk of code above)
 State state;
 int main() {
 echo_2 (&state , "hello", "world");

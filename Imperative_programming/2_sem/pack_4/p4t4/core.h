@@ -1,8 +1,8 @@
-typedef struct State {
-    char *regs [256];
-    } State;
-    
-    //prints ’ECHO: ’ and all passed strings separated by ’|’
+#include <string.h>
+#include <stdlib.h>
+#include <stdio.h> 
+
+//prints ’ECHO: ’ and all passed strings separated by ’|’
 void echo_0(State *state);
 void echo_1(State *state , char *arg0);
 void echo_2(State *state , char *arg0 , char *arg1);

@@ -1,9 +1,11 @@
-#include "decls.h"
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h> 
+
     
-    //prints ’ECHO: ’ and all passed strings separated by ’|’
+//     //prints ’ECHO: ’ and all passed strings separated by ’|’
+typedef struct State {
+        char *regs [256];
+        } State;
+
+#include "core.h"
 
 static int parseidx(const char *idx){
     return atoi(idx);
