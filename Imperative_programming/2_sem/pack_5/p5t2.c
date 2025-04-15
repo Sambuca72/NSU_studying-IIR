@@ -4,7 +4,7 @@
 #define MAX_V 200001
 
 typedef struct Node {
-    int vertex;
+    int vertex;//конец
     struct Node* next;
 } Node;
 
@@ -31,11 +31,11 @@ void addVert(Graph* g, int u, int v) {
 }
 
 void BFS(Graph* g, int* distance) {
-    int* queue = (int*)malloc(sizeof(int) * g->V);
+    int* queue = (int*)malloc(sizeof(int) * g->V); // очередь за пивасиком
     int* visited = (int*)calloc(g->V, sizeof(int));
     int front = 0, back = 0;
 
-    queue[back++] = 0; // Вершина 1 (индекс 0)
+    queue[back++] = 0;
     visited[0] = 1;
     distance[0] = 0;
 
