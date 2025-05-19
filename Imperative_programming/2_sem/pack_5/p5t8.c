@@ -1,8 +1,8 @@
 #include <stdio.h>
-#include <limits.h>
 #include <stdlib.h>
+#include <limits.h>
 
-#define MAX_V 301
+#define MAX_V 3001
 
 typedef struct Node {
     int vertex;
@@ -82,31 +82,37 @@ void printPath(int *prev, int v, FILE *out) {
     fprintf(out, " %d", v);
 }
 
-int main() {
+int main(){
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
-    int N, M, P, K;
-    scanf("%d %d %d %d", &N, &M, &P, &K);
+    int N, M, K;
+    scanf("%d %d %d", &N, &M, &K);
 
-    Graph* G = createGraph(N);
+    Graph *G = createGraph(N);
 
-    for(int i = 0; i < M; i++) {
+    int spread[2*K];
+
+    for(int i = 0; i < 2 * K; i += 2){
+        scanf("%d %d", &spread[i], &spread[i+1]);
+    }
+
+    for(int i = 0; i < M; i++){
         int u, v, w;
         scanf("%d %d %d", &u, &v, &w);
         addNode(G, u, v, w);
     }
 
-    for(int i = 0; i < P + K; i++) {
-        int S, T;
-        scanf("%d %d", &S, &T);
+    for(int i = 0; i < 2 * K; i += 2){
+        int S = spread[i];
+        int T = spread[i + 1];
 
-        int dist[MAX_V];
-        int prev[MAX_V];
+        int *dist = (int*)malloc(MAX_V * sizeof(int));
+        int *prev = (int*)malloc(MAX_V * sizeof(int));
         dijkstra(G, S, dist, prev);
-
-        if(i < P) {
-            printf("%d", dist[T]);
+        if(dist[T] != INT_MAX){
+            printf("YES");
+            printf(" %d", dist[T]);
 
             int count = 0;
             for(int v = T; v != -1; v = prev[v]) {
@@ -117,7 +123,7 @@ int main() {
             printPath(prev, T, stdout);
             printf("\n");
         } else {
-            printf("%d\n", dist[T]);
+            printf("NO\n");
         }
     }
 
@@ -132,6 +138,8 @@ int main() {
     free(G->adj);
     free(G);
 
+
     fclose(stdin);
     fclose(stdout);
+    return 0;
 }

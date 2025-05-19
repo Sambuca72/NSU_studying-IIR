@@ -25,7 +25,7 @@ Graph* createGraph(int V) {
     return g;
 }
 
-void addEdge(Graph* g, int u, int v, int w) {
+void addNode(Graph* g, int u, int v, int w) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->vertex = v;
     newNode->weight = w;
@@ -86,7 +86,7 @@ int main() {
     for (int i = 0; i < M; i++) {
         int u, v, w;
         scanf("%d %d %d", &u, &v, &w);
-        addEdge(G, u, v, w);
+        addNode(G, u, v, w);
     }
 
     int dist[MAX_V];

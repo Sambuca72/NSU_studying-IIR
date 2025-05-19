@@ -23,7 +23,7 @@ Graph* createGraph(int V) {
     return g;
 }
 
-void addVert(Graph* g, int u, int v) {
+void addNode(Graph* g, int u, int v) {
     Node* newNode = (Node*)malloc(sizeof(Node));
     newNode->vertex = v - 1; 
     newNode->next = g->adj[u - 1];
@@ -69,7 +69,7 @@ int main() {
     for (int i = 0; i < N; i++) {
         int from, where;
         scanf("%d %d", &from, &where);
-        addVert(g, from, where);
+        addNode(g, from, where);
     }
 
     int* distance = (int*)malloc(M * sizeof(int));

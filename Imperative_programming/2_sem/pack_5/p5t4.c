@@ -1,9 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#define MAXN 200001
-#define MAXM 200001
-
 typedef struct Node {
     int vertex;
     struct Node* next;
@@ -11,6 +8,7 @@ typedef struct Node {
 
 typedef struct {
     Node** adj;
+    int* in_degree;
     int V;
 } Graph;
 
@@ -18,108 +16,102 @@ Graph* createGraph(int V) {
     Graph* g = (Graph*)malloc(sizeof(Graph));
     g->V = V;
     g->adj = (Node**)malloc(V * sizeof(Node*));
+    g->in_degree = (int*)calloc(V, sizeof(int));
     for (int i = 0; i < V; i++) {
         g->adj[i] = NULL;
     }
     return g;
 }
 
-void addVert(Graph* g, int u, int v) {
+void addNode(Graph* g, int u, int v) {
     Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->vertex = v - 1;
-    newNode->next = g->adj[u - 1];
-    g->adj[u - 1] = newNode;
+    newNode->vertex = v;
+    newNode->next = g->adj[u];
+    g->adj[u] = newNode;
+    g->in_degree[v]++;
 }
 
-int DFS(Graph* g, int u, int* visited, int* recStack, int* parent, int* cycle, int* cycleLen) {
-    visited[u] = 1;
-    recStack[u] = 1;
+int* topologicalSort(Graph* g) {
+    int* order = (int*)malloc(g->V * sizeof(int));
+    int* queue = (int*)malloc(g->V * sizeof(int));
+    int front = 0, rear = 0;
 
-    Node* node = g->adj[u];
-    while (node) {
-        int v = node->vertex;
-        if (!visited[v]) {
-            parent[v] = u;
-            if (DFS(g, v, visited, recStack, parent, cycle, cycleLen)) return 1;
-        } else if (recStack[v]) {
-            // Нашли цикл
-            int cur = u;
-            *cycleLen = 0;
-            cycle[(*cycleLen)++] = v + 1; 
-            while (cur != v) {
-                cycle[(*cycleLen)++] = cur + 1;
-                cur = parent[cur];
+    for (int i = 0; i < g->V; i++) {
+        if (g->in_degree[i] == 0) {
+            queue[rear++] = i;
+        }
+    }
+
+    int idx = 0;
+    while (front < rear) {
+        int u = queue[front++];
+        order[idx++] = u;
+
+        Node* node = g->adj[u];
+        while (node != NULL) {
+            int v = node->vertex;
+            g->in_degree[v]--;
+            if (g->in_degree[v] == 0) {
+                queue[rear++] = v;
             }
-            return 1;
-        }
-        node = node->next;
-    }
-
-    recStack[u] = 0;
-    return 0;
-}
-
-int findCycle(Graph* g, int* cycle, int* cycleLen) {
-    int* visited = (int*)calloc(g->V, sizeof(int));
-    int* recStack = (int*)calloc(g->V, sizeof(int));
-    int* parent = (int*)malloc(g->V * sizeof(int));
-
-    for (int i = 0; i < g->V; i++) {
-        parent[i] = -1;
-    }
-
-    for (int i = 0; i < g->V; i++) {
-        if (!visited[i] && DFS(g, i, visited, recStack, parent, cycle, cycleLen)) {
-            free(visited);
-            free(recStack);
-            free(parent);
-            return 1;
+            node = node->next;
         }
     }
 
-    free(visited);
-    free(recStack);
-    free(parent);
-    return 0;
+    free(queue);
+
+    if (idx != g->V) {
+        free(order);
+        return NULL;
+    }
+
+    return order;
 }
 
 int main() {
     freopen("input.txt", "r", stdin);
     freopen("output.txt", "w", stdout);
 
-    int N, M;
-    scanf("%d %d", &N, &M);
+    int n, m;
+    scanf("%d %d", &n, &m);
 
-    Graph* g = createGraph(N); 
+    Graph* g = createGraph(n);
 
-    for (int i = 0; i < M; i++) { 
-        int from, where;
-        scanf("%d %d", &from, &where);
-        addVert(g, from, where);
+    for (int i = 0; i < m; i++) {
+        int u, v;
+        scanf("%d %d", &u, &v);
+        addNode(g, u - 1, v - 1);
     }
 
-    int cycle[MAXN];
-    int cycleLen = 0;
+    int* order = topologicalSort(g);
 
-    if (findCycle(g, cycle, &cycleLen)) {
-        printf("%d\n", cycleLen);
-        for (int i = cycleLen - 1; i >= 0; i--) { 
-            printf("%d ", cycle[i]);
+    if (order == NULL) {
+        printf("NO\n");
+    } else {
+        int* result = (int*)malloc(n * sizeof(int));
+        for (int i = 0; i < n; i++) {
+            result[order[i]] = i + 1;
+        }
+        printf("YES\n");
+        for (int i = 0; i < n; i++) {
+            printf("%d ", result[i]);
         }
         printf("\n");
-    } else {
-        printf("-1\n");
+        free(result);
     }
 
-    for (int i = 0; i < N; i++) {
+    free(order);
+
+    for (int i = 0; i < n; i++) {
         Node* node = g->adj[i];
-        while (node) {
+        while (node != NULL) {
             Node* temp = node;
             node = node->next;
             free(temp);
         }
     }
     free(g->adj);
+    free(g->in_degree);
     free(g);
 
     fclose(stdin);
