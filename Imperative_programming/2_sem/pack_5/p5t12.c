@@ -2,8 +2,6 @@
 #include <limits.h>
 #include <stdlib.h>
 
-#define INF 1e18
-
 typedef long long ll;
 
 typedef struct Node {
@@ -29,54 +27,46 @@ Graph* createGraph(int V) {
 
 void addNode(Graph* g, int u, int v, ll weight) {
     Node* newNode = (Node*)malloc(sizeof(Node));
-    newNode->vertex = v - 1;
+    newNode->vertex = v;
     newNode->weight = weight;
-    newNode->next = g->adj[u - 1];
-    g->adj[u - 1] = newNode;
-}
-
-void dfs(Graph* g, int u, int* reachable_from_neg) {
-    reachable_from_neg[u] = 1;
-    for (Node* node = g->adj[u]; node; node = node->next) {
-        int v = node->vertex;
-        if (!reachable_from_neg[v]) {
-            dfs(g, v, reachable_from_neg);
-        }
-    }
+    newNode->next = g->adj[u];
+    g->adj[u] = newNode;
 }
 
 void bellmanford(Graph* g, int start, ll *dist, int *nigative) {
     int V = g->V;
 
     for (int i = 0; i < V; i++) {
-        dist[i] = INF;
+        dist[i] = LLONG_MAX;
     }
     dist[start] = 0;
 
+    
     for (int i = 0; i < V - 1; i++) {
         for (int u = 0; u < V; u++) {
             for (Node* node = g->adj[u]; node; node = node->next) {
                 int v = node->vertex;
                 ll weight = node->weight;
-                if (dist[u] != INF && dist[v] > dist[u] + weight) {
+                if (dist[u] != LLONG_MAX && dist[v] > dist[u] + weight) {
                     dist[v] = dist[u] + weight;
                 }
             }
         }
     }
     
+    
     for (int u = 0; u < V; u++) {
         for (Node* node = g->adj[u]; node; node = node->next) {
             int v = node->vertex;
             ll w = node->weight;
-            if (dist[u] != INF && dist[v] > dist[u] + w) {
+            if (dist[u] != LLONG_MAX && dist[v] > dist[u] + w) {
                 nigative[v] = 1;
             }
         }
     }
 
-    
-    for(int i = 0; i < V - 1; i++){
+
+    for (int i = 0; i < V - 1; i++) {
         for (int u = 0; u < V; u++) {
             for (Node* node = g->adj[u]; node; node = node->next) {
                 int v = node->vertex;
@@ -88,18 +78,7 @@ void bellmanford(Graph* g, int start, ll *dist, int *nigative) {
     }
 
     
-    
-
-    // for (int i = 1; i <= g->V; i++) {
-    //     if (negative[i] && !reachable_from_neg[i]) {
-    //         dfs(g, i, reachable_from_neg);
-    //     }
-    // }
-
-
-
 }
-
 
 int main() {
     freopen("input.txt", "r", stdin);
@@ -111,28 +90,26 @@ int main() {
     Graph *g = createGraph(N);
 
     for (int i = 0; i < M; i++) {
-        int u, v, w;
-        scanf("%d %d %d", &u, &v, &w);
-        addNode(g, u, v, w);
+        int u, v;
+        ll w;
+        scanf("%d %d %lld", &u, &v, &w);
+        addNode(g, u - 1, v - 1, w); 
     }
 
-    ll *dist = (ll*)malloc((N) * sizeof(ll));
+    ll *dist = (ll*)malloc(N * sizeof(ll));
     int *nigative = (int*)calloc(N, sizeof(int));
-    // int *reach_from_nigative = (int*)calloc(N + 1, sizeof(int));
-    // int prev[MAX_V];
+
     bellmanford(g, S - 1, dist, nigative);
 
-    for(int i = 0; i < N; i++) {
-        if(nigative[i]) {
+    for (int i = 0; i < N; i++) {
+        if (nigative[i]) {
             printf("-\n");
-        } else if(dist[i] == INF) {
+        } else if (dist[i] == LLONG_MAX) {
             printf("*\n");
         } else {
             printf("%lld\n", dist[i]);
         }
     }
-
-
 
     for (int i = 0; i < N; i++) {
         Node* node = g->adj[i];
@@ -146,8 +123,6 @@ int main() {
     free(g);
     free(dist);
     free(nigative);
-    // free(reach_from_nigative);
-
 
     fclose(stdin);
     fclose(stdout);
