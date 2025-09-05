@@ -14,6 +14,12 @@
         "utility": "cpp",
         "vector": "cpp",
         "memory_resource": "c",
-        "limits.h": "c"
-    }
+        "limits.h": "c",
+        "stdio.h": "c",
+        "integerset.h": "c",
+        "p5t3": "c",
+        "compare": "c",
+        "cstdint": "c"
+    },
+    "python.terminal.activateEnvironment": false
 }
