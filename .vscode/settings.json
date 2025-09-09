@@ -19,7 +19,9 @@
         "integerset.h": "c",
         "p5t3": "c",
         "compare": "c",
-        "cstdint": "c"
+        "cstdint": "c",
+        "iostream": "cpp",
+        "ostream": "cpp"
     },
     "python.terminal.activateEnvironment": false
 }
