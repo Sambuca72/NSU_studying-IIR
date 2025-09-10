@@ -21,7 +21,8 @@
         "compare": "c",
         "cstdint": "c",
         "iostream": "cpp",
-        "ostream": "cpp"
+        "ostream": "cpp",
+        "fstream": "cpp"
     },
     "python.terminal.activateEnvironment": false
 }
