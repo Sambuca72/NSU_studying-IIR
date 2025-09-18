@@ -10,7 +10,7 @@ def check_matrix_dimensions(matrix_a, matrix_b, op_type):
 
 
     if len(set(len(row) for row in matrix_b)) != 1:
-        print("Error: rows of matrix A has diffirent lenght")
+        print("Error: rows of matrix B has diffirent lenght")
         return False
     
     if op_type == 1:
