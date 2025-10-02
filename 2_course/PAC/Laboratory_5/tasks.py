@@ -22,52 +22,56 @@ def apply_mask(image, label):
     return result
 
 def cont(image, label):
-
-    contours, hierarchy = cv2.findContours(label, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+    _, thresh_label = cv2.threshold(label, 200, 255, cv2.THRESH_BINARY) 
+    contours, hierarchy = cv2.findContours(thresh_label, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     result = image.copy()
 
     for i in range(len(contours)):
-        if cv2.contourArea(contours[i]) > 100:
-            result = cv2.drawContours(result, contours, i, (0, 255, 0), 3)
+        # if cv2.contourArea(contours[i]) > 100:
+        result = cv2.drawContours(result, contours, i, (0, 255, 0), 3)
     
 
     result = cv2.cvtColor(result, cv2.COLOR_BGR2RGB)
     
     return result
 
+def task_1():
+    images_folder_path = "archive/images/"
+    labels_folder_path = "archive/labels/"
 
-images_folder_path = "archive/images/"
-labels_folder_path = "archive/labels/"
+    images = os.listdir(images_folder_path)
 
-images = os.listdir(images_folder_path)
+    for name in images: 
+        image = cv2.imread(images_folder_path + name, cv2.IMREAD_COLOR_RGB)
+        label = cv2.imread(labels_folder_path + name, cv2.IMREAD_GRAYSCALE)
 
-# name = images[0]
-for name in images: 
-    image = cv2.imread(f"archive/images/{name}", cv2.IMREAD_COLOR_RGB)
-    label = cv2.imread(f"archive/labels/{name}", cv2.IMREAD_GRAYSCALE)
-
-    result = apply_mask(image, label)
-    cnt = cont(image, label)
-
-
-    cv2.imshow("contours", cnt)
-    cv2.imshow("result", result)
-
-    if(cv2.waitKey(0) == 27):
-        break
+        result = apply_mask(image, label)
+        cnt = cont(image, label)
 
 
-cap = cv2.VideoCapture(0)
+        cv2.imshow("contours", cnt)
+        cv2.imshow("result", result)
 
-while True:
-    ret, frame = cap.read()
-    frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+        if(cv2.waitKey(0) == 27):
+            break
 
-    cv2.imshow("video", frame)
-    
-    if cv2.waitKey(10) == 27:
-        break
+def task_4():
+    cap = cv2.VideoCapture(0)
 
-cap.release()
-cv2.destroyAllWindows()
+    while True:
+        ret, frame = cap.read()
+        frame = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
+        cv2.imshow("video", frame)
+        
+        if cv2.waitKey(10) == 27:
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+def main():
+    task_1()
+    task_4()
+
+main()

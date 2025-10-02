@@ -75,41 +75,43 @@ def detect_motion_OpticalFlow(prev_frame, frame, motion_interval, lights_change_
         cv2.circle(result, (100, 200), 30, (0, 255, 0), -1)
     return result, red_light, lights_change_time
 
+def main():
+    cap = cv2.VideoCapture(0)
 
-cap = cv2.VideoCapture(0)
-
-ret, prev_frame = cap.read()
-if not ret:
-    print("Frame reading error occurs")
-    exit()
-
-motion_interval = int(input("Input Lights interval: "))
-method_choice = int(input("Input method that should be used(1 - absdiff, 2 - OpticalFlow): "))
-
-lights_change_time = time.time()
-red_light = False
-
-
-while True:
-
-    ret, frame = cap.read()
+    ret, prev_frame = cap.read()
     if not ret:
-        break
+        print("Frame reading error occurs")
+        exit()
 
-    if method_choice == 1:
-        result, red_light, lights_change_time= detect_motion_AbsDiff(prev_frame, frame, motion_interval, lights_change_time, red_light)
-    else:
-        result, red_light, lights_change_time= detect_motion_OpticalFlow(prev_frame, frame, motion_interval, lights_change_time, red_light)
+    motion_interval = int(input("Input Lights interval: "))
+    method_choice = int(input("Input method that should be used(1 - absdiff, 2 - OpticalFlow): "))
 
-    cv2.imshow("frame", result)
+    lights_change_time = time.time()
+    red_light = False
 
-    
-    prev_frame = frame.copy()
-    
-    
 
-    if(cv2.waitKey(10) == 27):
-        break
+    while True:
 
-cap.release()
-cv2.destroyAllWindows()
+        ret, frame = cap.read()
+        if not ret:
+            break
+
+        if method_choice == 1:
+            result, red_light, lights_change_time= detect_motion_AbsDiff(prev_frame, frame, motion_interval, lights_change_time, red_light)
+        else:
+            result, red_light, lights_change_time= detect_motion_OpticalFlow(prev_frame, frame, motion_interval, lights_change_time, red_light)
+
+        cv2.imshow("frame", result)
+
+        
+        prev_frame = frame.copy()
+        
+        
+
+        if(cv2.waitKey(10) == 27):
+            break
+
+    cap.release()
+    cv2.destroyAllWindows()
+
+main()
