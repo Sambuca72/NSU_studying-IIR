@@ -22,7 +22,8 @@
         "cstdint": "c",
         "iostream": "cpp",
         "ostream": "cpp",
-        "fstream": "cpp"
+        "fstream": "cpp",
+        "cmath": "cpp"
     },
     "python.terminal.activateEnvironment": false
 }

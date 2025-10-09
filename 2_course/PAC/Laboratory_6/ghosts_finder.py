@@ -19,22 +19,17 @@ def find_unique_points(image, original_image):
     
     matches1 = bf.match(descriptors_1, descriptors_2)
     matches2 = bf.match(descriptors_1, descriptors_3)
-    
+
    
     matches1 = sorted(matches1, key = lambda x:x.distance)
     matches2 = sorted(matches2, key = lambda x:x.distance)
+
 
     src_pts_1 = np.float32([keypoints_1[m.queryIdx].pt for m in matches1]).reshape(-1, 2)
     dst_pts_1 = np.float32([keypoints_2[m.trainIdx].pt for m in matches1]).reshape(-1, 2)
 
     src_pts_2 = np.float32([keypoints_1[m.queryIdx].pt for m in matches2]).reshape(-1, 2)
     dst_pts_2 = np.float32([keypoints_3[m.trainIdx].pt for m in matches2]).reshape(-1, 2)
-
-    all_src_pts = np.vstack([src_pts_1, src_pts_2])
-    all_dst_pts = np.vstack([dst_pts_1, dst_pts_2])
-
-
-    
 
     all_src_pts = np.vstack([src_pts_1, src_pts_2])
     all_dst_pts = np.vstack([dst_pts_1, dst_pts_2])
@@ -65,8 +60,8 @@ def find_unique_points(image, original_image):
             continue
 
         h, w = image.shape[:2]
-        corners = np.float32([[0, 0], [w-1, 0], [w-1, h-1], [0, h-1]]).reshape(-1, 1, 2)
-        H_inv = np.linalg.inv(H) 
+        corners = np.float32([[0, 0], [w - 1, 0], [w - 1, h - 1], [0, h-1]]).reshape(-1, 1, 2)
+        H_inv, status = cv2.invert(H)
         transformed_corners = cv2.perspectiveTransform(corners, H_inv)
 
         top_left = (int(min(transformed_corners[:, 0, 0])), int(min(transformed_corners[:, 0, 1])))

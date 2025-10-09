@@ -3,7 +3,7 @@ import cv2
 import numpy as np
 import random
 
-class DataGenerator:
+class DeGenerator:
     def __init__(self, image_dir, mask_dir, batch_size=4, res_size=(400, 400)):
         self.image_dir = image_dir
         self.mask_dir = mask_dir
@@ -105,7 +105,7 @@ class DataGenerator:
 def main():
     image_dir = "archive/images/"
     mask_dir = "archive/labels/"
-    generator = DataGenerator(image_dir, mask_dir, batch_size=4, res_size=(400, 400))
+    generator = DeGenerator(image_dir, mask_dir, batch_size=4, res_size=(400, 400))
     
     
     for i in range(len(generator)):
