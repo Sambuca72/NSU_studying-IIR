@@ -1,0 +1,96 @@
+#pragma once
+#include <iostream>
+#include <cmath>
+#include <fstream>
+#include <sstream>
+#include <vector>
+#include <string>
+#include <algorithm>
+using namespace std;
+
+struct Node{
+    int id;
+    double x, y;
+    Node(int id = 0, double x = 0.0, double y = 0.0) : id(id), x(x), y(y) {}
+    double distance(const Node& other) const{
+        return sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
+    }
+};
+
+struct Edge{
+    int u, v;
+    double w;
+    Edge(int u = 0, int v = 0, double w = 0.0) : u(u), v(v), w(w) {}
+    bool operator<(const Edge& other) const{
+        return w < other.w;
+    }
+};
+
+class UnionFind{
+private:
+    vector<int> parent, rank;
+public:
+    UnionFind(int size) : parent(size + 1), rank(size + 1, 0) {
+        for (int i = 0; i <= size; ++i) {
+            parent[i] = i;
+        }
+    }
+    
+    int find(int i){
+        if(parent[i] != i){
+            parent[i] = find(parent[i]);
+        }
+        return parent[i];
+    }
+
+    void union_sets(int u, int v){
+        u = find(u);
+        v = find(v);
+        if(u != v){
+            if(rank[u] < rank[v]) swap(u, v);
+            parent[v] = u;
+            if(rank[u] == rank[v]) ++rank[u];
+        }
+    }
+
+};
+
+class Graph{
+private:
+    vector<Node> nodes;
+    vector<Edge> edges;
+public:
+    void addNode(const Node& node){
+        nodes.push_back(node);
+    }
+
+    void buildEdges(){
+        edges.clear();
+        for(size_t i = 0; i < nodes.size(); ++i){
+            for(size_t j = i + 1; j < nodes.size(); ++j){
+                double dist = nodes[i].distance(nodes[j]);
+                edges.emplace_back(nodes[i].id, nodes[j].id, dist);
+            }
+        }
+    }
+
+    vector<Edge> kruskalMST(){
+        sort(edges.begin(), edges.end());
+        UnionFind uf(nodes.size());
+        vector<Edge> mst;
+        for(const auto & e : edges){
+            if(uf.find(e.u) != uf.find(e.v)){
+                uf.union_sets(e.u, e.v);
+                mst.push_back(e);
+            }
+        }
+        return mst;
+    }
+
+    const vector<Node>& getNodes() const {
+        return nodes;
+    }
+};
+
+vector<Node> readPoints(const std::string& filename);
+void writeMST(const string& filename, const vector<Edge>& mst);
