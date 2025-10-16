@@ -8,6 +8,7 @@
 #include <algorithm>
 using namespace std;
 
+// Структура точек
 struct Node{
     int id;
     double x, y;
@@ -17,6 +18,7 @@ struct Node{
     }
 };
 
+// Структура точек
 struct Edge{
     int u, v;
     double w;
@@ -26,6 +28,7 @@ struct Edge{
     }
 };
 
+//Класс для объединения двух компонент графа
 class UnionFind{
 private:
     vector<int> parent, rank;
@@ -36,6 +39,7 @@ public:
         }
     }
     
+    // Функция поиска инцидентных вершин ребра
     int find(int i){
         if(parent[i] != i){
             parent[i] = find(parent[i]);
@@ -43,6 +47,7 @@ public:
         return parent[i];
     }
 
+    // Фкнкция объединения двух компонент
     void union_sets(int u, int v){
         u = find(u);
         v = find(v);
@@ -55,6 +60,7 @@ public:
 
 };
 
+//Класс графа
 class Graph{
 private:
     vector<Node> nodes;
@@ -64,6 +70,7 @@ public:
         nodes.push_back(node);
     }
 
+    // Фнкция создания ребер
     void buildEdges(){
         edges.clear();
         for(size_t i = 0; i < nodes.size(); ++i){
@@ -74,6 +81,7 @@ public:
         }
     }
 
+    //Построение MST с помощью алгоритма Крускала
     vector<Edge> kruskalMST(){
         sort(edges.begin(), edges.end());
         UnionFind uf(nodes.size());
@@ -86,11 +94,8 @@ public:
         }
         return mst;
     }
-
-    const vector<Node>& getNodes() const {
-        return nodes;
-    }
 };
 
-vector<Node> readPoints(const std::string& filename);
+//Объявление функций чтения и записи
+vector<Node> readPoints(const string& filename);
 void writeMST(const string& filename, const vector<Edge>& mst);

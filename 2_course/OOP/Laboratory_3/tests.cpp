@@ -63,26 +63,49 @@ TEST_F(MSTTest, DistanceCalculation) {
 // Тест алгоритма Крускала
 TEST_F(MSTTest, BuildMST) {
     Graph graph;
-    graph.addNode(Node(1, 7.0, 5.0));
-    graph.addNode(Node(2, 3.0, -11.0));
-    graph.addNode(Node(3, 2.0, -2.0));
-    graph.addNode(Node(4, -1.0, -8.0));
-    graph.addNode(Node(5, 14.0, -14.0));
+    // Добавляем 10 узлов, расположенных на прямой x = 0..9, y = 0
+    graph.addNode(Node(1, 0.0, 0.0));
+    graph.addNode(Node(2, 1.0, 0.0));
+    graph.addNode(Node(3, 2.0, 0.0));
+    graph.addNode(Node(4, 3.0, 0.0));
+    graph.addNode(Node(5, 4.0, 0.0));
+    graph.addNode(Node(6, 5.0, 0.0));
+    graph.addNode(Node(7, 6.0, 0.0));
+    graph.addNode(Node(8, 7.0, 0.0));
+    graph.addNode(Node(9, 8.0, 0.0));
+    graph.addNode(Node(10, 9.0, 0.0));
+    
     graph.buildEdges();
     std::vector<Edge> mst = graph.kruskalMST();
-    ASSERT_EQ(mst.size(), 4); // Для 5 точек MST имеет 4 ребра
+    
+    // Проверяем, что MST содержит 9 рёбер для 10 вершин
+    ASSERT_EQ(mst.size(), 9);
+    
     // Проверяем наличие ожидаемых рёбер
-    bool has1_3 = false, has2_4 = false, has2_5 = false, has3_4 = false;
+    bool has1_2 = false, has2_3 = false, has3_4 = false, has4_5 = false;
+    bool has5_6 = false, has6_7 = false, has7_8 = false, has8_9 = false, has9_10 = false;
     for (const auto& e : mst) {
-        if ((e.u == 1 && e.v == 3) || (e.u == 3 && e.v == 1)) has1_3 = true;
-        if ((e.u == 2 && e.v == 4) || (e.u == 4 && e.v == 2)) has2_4 = true;
-        if ((e.u == 2 && e.v == 5) || (e.u == 5 && e.v == 2)) has2_5 = true;
+        if ((e.u == 1 && e.v == 2) || (e.u == 2 && e.v == 1)) has1_2 = true;
+        if ((e.u == 2 && e.v == 3) || (e.u == 3 && e.v == 2)) has2_3 = true;
         if ((e.u == 3 && e.v == 4) || (e.u == 4 && e.v == 3)) has3_4 = true;
+        if ((e.u == 4 && e.v == 5) || (e.u == 5 && e.v == 4)) has4_5 = true;
+        if ((e.u == 5 && e.v == 6) || (e.u == 6 && e.v == 5)) has5_6 = true;
+        if ((e.u == 6 && e.v == 7) || (e.u == 7 && e.v == 6)) has6_7 = true;
+        if ((e.u == 7 && e.v == 8) || (e.u == 8 && e.v == 7)) has7_8 = true;
+        if ((e.u == 8 && e.v == 9) || (e.u == 9 && e.v == 8)) has8_9 = true;
+        if ((e.u == 9 && e.v == 10) || (e.u == 10 && e.v == 9)) has9_10 = true;
     }
-    ASSERT_TRUE(has1_3);
-    ASSERT_TRUE(has2_4);
-    ASSERT_TRUE(has2_5);
+    
+    // Проверяем, что все ожидаемые рёбра присутствуют
+    ASSERT_TRUE(has1_2);
+    ASSERT_TRUE(has2_3);
     ASSERT_TRUE(has3_4);
+    ASSERT_TRUE(has4_5);
+    ASSERT_TRUE(has5_6);
+    ASSERT_TRUE(has6_7);
+    ASSERT_TRUE(has7_8);
+    ASSERT_TRUE(has8_9);
+    ASSERT_TRUE(has9_10);
 }
 
 // Тест записи MST
