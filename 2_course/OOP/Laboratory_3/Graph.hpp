@@ -8,24 +8,12 @@
 #include <algorithm>
 using namespace std;
 
-// Структура точек
-struct Node{
-    int id;
-    double x, y;
-    Node(int id = 0, double x = 0.0, double y = 0.0) : id(id), x(x), y(y) {}
-    double distance(const Node& other) const{
-        return sqrt((x - other.x) * (x - other.x) + (y - other.y) * (y - other.y));
-    }
-};
 
 // Структура точек
 struct Edge{
-    int u, v;
+    string u, v;
     double w;
-    Edge(int u = 0, int v = 0, double w = 0.0) : u(u), v(v), w(w) {}
-    bool operator<(const Edge& other) const{
-        return w < other.w;
-    }
+    Edge( u = 0, int v = 0, double w = 0.0) : u(u), v(v), w(w) {}
 };
 
 //Класс для объединения двух компонент графа
