@@ -1,4 +1,4 @@
-#include "Dijkstra.h"
+#include "Graph.hpp"
 #include <gtest/gtest.h>
 #include <sstream>
 
@@ -6,42 +6,6 @@ class DijkstraTest : public ::testing::Test {
 protected:
     const double epsilon = 1e-10; // Для сравнения чисел с плавающей точкой (не используется здесь)
 };
-
-// Тест чтения графа
-TEST_F(DijkstraTest, ReadGraphValid) {
-    std::stringstream ss(
-        "Moscow-Novosibirsk-7\n"
-        "Moscow-Toronto-9\n"
-        "Moscow-Krasnoyarsk-14\n"
-        "Novosibirsk-Toronto-10\n"
-        "Novosibirsk-Omsk-15\n"
-        "Omsk-Toronto-11\n"
-        "Toronto-Krasnoyarsk-2\n"
-        "Krasnoyarsk-Kiev-9\n"
-        "Kiev-Omsk-6\n"
-        "invalid line\n"
-        "\n"
-    );
-    std::vector<Edge> edges;
-    std::string line;
-    while (std::getline(ss, line)) {
-        if (line.empty()) continue;
-        std::stringstream line_ss(line);
-        std::string u, v;
-        unsigned int w;
-        char dash1, dash2;
-        if (std::getline(line_ss, u, '-') && line_ss >> dash1 >> v >> dash2 >> w && dash1 == '-' && dash2 == '-') {
-            edges.emplace_back(u, v, w);
-        }
-    }
-    ASSERT_EQ(edges.size(), 9);
-    ASSERT_EQ(edges[0].u, "Moscow");
-    ASSERT_EQ(edges[0].v, "Novosibirsk");
-    ASSERT_EQ(edges[0].w, 7);
-    ASSERT_EQ(edges[8].u, "Kiev");
-    ASSERT_EQ(edges[8].v, "Omsk");
-    ASSERT_EQ(edges[8].w, 6);
-}
 
 // Тест чтения пустого или невалидного ввода
 TEST_F(DijkstraTest, ReadGraphEmpty) {
@@ -75,11 +39,12 @@ TEST_F(DijkstraTest, DijkstraShortestPath) {
     graph.addEdge("Kiev", "Omsk", 6);
 
     PathResult result = graph.dijkstra("Moscow", "Kiev");
-    ASSERT_EQ(result.path.size(), 3);
+    ASSERT_EQ(result.path.size(), 4);
     ASSERT_EQ(result.path[0], "Moscow");
     ASSERT_EQ(result.path[1], "Toronto");
-    ASSERT_EQ(result.path[2], "Kiev");
-    ASSERT_EQ(result.weight, 11); // Путь: Moscow -> Toronto (9) -> Krasnoyarsk (2) -> Kiev (9) = 20 (ошибка в примере)
+    ASSERT_EQ(result.path[2], "Krasnoyarsk");
+    ASSERT_EQ(result.path[3], "Kiev");
+    ASSERT_EQ(result.weight, 20); // Путь: Moscow -> Toronto (9) -> Krasnoyarsk (2) -> Kiev (9) = 20 (ошибка в примере)
 }
 
 // Тест для случая, когда путь не существует

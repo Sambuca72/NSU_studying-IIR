@@ -61,7 +61,7 @@ def find_unique_points(image, original_image):
 
         h, w = image.shape[:2]
         corners = np.float32([[0, 0], [w - 1, 0], [w - 1, h - 1], [0, h-1]]).reshape(-1, 1, 2)
-        H_inv, status = cv2.invert(H)
+        H_inv = np.linalg.inv(H)
         transformed_corners = cv2.perspectiveTransform(corners, H_inv)
 
         top_left = (int(min(transformed_corners[:, 0, 0])), int(min(transformed_corners[:, 0, 1])))
